@@ -10,20 +10,11 @@
 #include <t3d/t3ddebug.h>
 #include <math.h>
 
-
-
-
 #include "shared.h"
 #include "input.h"
 #include "stats.h"
 #include "draw.h"
 
-void check_bounds();
-void add_test_sphere();
-void testCollision();
 void updateReticule();
-
-
-
 
 #endif

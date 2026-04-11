@@ -11,20 +11,14 @@
 #include <math.h>
 #include <rdpq.h>
 
-
 #include "shared.h"
 #include "input.h"
-#include "collision.h"
 #include "lights.h"
-
-
-
 
 extern rspq_block_t *dplPlayerCharacter;
 extern rspq_block_t *dplMap;
 extern rspq_block_t *dplCube;
 extern rspq_block_t *testRet;
-
 
 extern uint8_t colorAmbient[4];
 extern uint8_t colorDir[4];

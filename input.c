@@ -7,37 +7,22 @@ joypad_buttons_t btnHeld;
 float rotatedStickX = 0.0f;
 float rotatedStickY = 0.0f;
 
-
 bool isPaused = false;
-
 
 T3DVec3 newDir = {{0.0f, 0.0f, 0.0f}};
 
 void check_controller_state(void) {
-  // joypad_poll();
-
   joypad = joypad_get_inputs(JOYPAD_PORT_1);
   btn = joypad_get_buttons_pressed(JOYPAD_PORT_1);
   btnHeld = joypad_get_buttons_held(JOYPAD_PORT_1);
 
-
   rotatedStickX = joypad.stick_x * cosf(camRotationY) - joypad.stick_y * sinf(camRotationY);
   rotatedStickY = joypad.stick_x * sinf(camRotationY) + joypad.stick_y * cosf(camRotationY);
 
-  // newDir = (T3DVec3){{rotatedStickX, 0, -rotatedStickY}};
   newDir = (T3DVec3){{rotatedStickX * 0.5f, 0, -rotatedStickY * 0.5f}};
-  speed = sqrtf(t3d_vec3_len2(&newDir));    // Calculate speed
+  speed = sqrtf(t3d_vec3_len2(&newDir));
 
-
-
-  // Close up view
-  // if (btn.r) {
-  //   closeUp = !closeUp;
-  //   camTarget = playerPos; // Camera looks at player position
-  //   playerMove = !playerMove;
-  // }
-
-  if (btnHeld.r){
+  if (btnHeld.r) {
     closeUp = true;
     playerMove = false;
     isRun = false;
@@ -47,33 +32,32 @@ void check_controller_state(void) {
   } else {
     closeUp = false;
     playerMove = true;
-    camTarget = playerPos; // Camera looks at player position
-
+    camTarget = playerPos;
   }
 
-  // Camera with follow
+  // Camera rotation with stick
   if (!closeUp) {
-    if (joypad.stick_x > 70){
+    if (joypad.stick_x > 70) {
       x_cam -= 1.5f;
-    } else if (joypad.stick_x < -70){
+    } else if (joypad.stick_x < -70) {
       x_cam += 1.5f;
     }
   } else {
-    if (joypad.stick_x > 40){
+    if (joypad.stick_x > 40) {
       x_cam -= 1.5f;
-    } else if (joypad.stick_x < -40){
+    } else if (joypad.stick_x < -40) {
       x_cam += 1.5f;
     }
   }
 
-  //////////////// Camera movement
+  // Camera rotation with C-buttons
   if (!isPaused) {
     if (btnHeld.c_left) {
       x_cam -= 2.5f;
     } else if (btnHeld.c_right) {
       x_cam += 2.5f;
     }
-  }else {
+  } else {
     if (btnHeld.z) {
       if (btnHeld.c_left) {
         x_cam -= 2.5f;
@@ -83,30 +67,9 @@ void check_controller_state(void) {
     }
   }
 
-
-  // if (isPaused) {
-  //   // if (btnHeld.d_down) {
-  //   //   cubePos.v[1] -= 1.0f;
-  //   // } else if (btnHeld.d_up) {
-  //   //   cubePos.v[1] += 1.0f;
-  //   // }
-  //   // if (btnHeld.d_left) {
-  //   //   cubePos.v[2] -= 1.0f;
-  //   // } else if (btnHeld.d_right) {
-  //   //   cubePos.v[2] += 1.0f;
-  //   // }
-  //   // // if (btnHeld.c_up) {
-  //   // //   cubePos.v[0] += 1.0f;
-  //   // // } else if (btnHeld.c_down) {
-  //   // //   cubePos.v[0] -= 1.0f;
-  //   // // }
-  // }
-
-
   if (!isPaused) {
 
-
-    ////////////////////// Player movement
+    // Player movement
     isRun = speed >= 0.6f;
 
     if (speed > 0.15f) {
@@ -114,7 +77,6 @@ void check_controller_state(void) {
       newDir.v[2] /= speed;
       moveDir = newDir;
 
-      //update where the shot is going
       if (!shotFired) {
         shotDir = newDir;
       }
@@ -130,18 +92,13 @@ void check_controller_state(void) {
 
     currSpeed = isRun ? PLAYER_RUN_SPEED : t3d_lerp(currSpeed, speed * PLAYER_MOVE_SPEED, 0.15f);
 
-    //New Directions Check
     if (newDir.v[2] != 0.0f) {
       lastZDir = signum((int)newDir.v[2]);
     } else {
       lastZDir = -1;
     }
 
-
-
-
-
-    ///////////////  Jump
+    // Jump
     if (btn.a && (!isJump && playerMove)) {
       aPress = true;
       isJump = true;
@@ -161,15 +118,14 @@ void check_controller_state(void) {
       }
     }
 
-    ////////////////  Roll
+    // Roll
     if (btn.c_down && (!isRoll && playerMove)) {
       isRoll = true;
       t3d_anim_set_playing(&animRoll, true);
       t3d_anim_set_time(&animRoll, 0.50f);
     }
 
-
-    ////////////////  Shot
+    // Shot
     if (btnHeld.b && !shotFired) {
       shotHeld = true;
       shotSize = clamp(shotSize + SHOT_SIZE_INCREMENT, shotSizeMin, shotSizeMax);
@@ -190,27 +146,15 @@ void check_controller_state(void) {
       lockedShotDir = shotDir;
     }
 
-   //if the shot is fired and the shotsize is greater than the minimum, decreaase the shot size
     if (shotFired && shotSize > shotSizeMin) {
       shotSize -= SHOT_SIZE_INCREMENT;
       if (shotSize < shotSizeMin) {
         shotSize = shotSizeMin;
       }
     }
-
   }
-
 
   if (btn.start) {
-    //pause the game
-    if (isPaused) {
-      isPaused = false;
-    } else {
-      isPaused = true;
-    }
-
+    isPaused = !isPaused;
   }
-
-
-
 }

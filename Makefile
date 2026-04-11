@@ -1,6 +1,5 @@
 BUILD_DIR=build
-T3D_INST=$(shell realpath ../../tiny3d)
-
+T3D_INST=$(shell realpath ../tiny3d)
 
 include $(N64_INST)/include/n64.mk
 include $(T3D_INST)/t3d.mk
@@ -9,7 +8,7 @@ N64_CFLAGS += -std=gnu2x -O2
 
 PROJECT_NAME=base_engine1
 
-src = main.c input.c shared.c collision.c draw.c audio.c stats.c lights.c test_collision.c
+src = main.c input.c shared.c collision.c draw.c audio.c stats.c lights.c
 assets_png = $(wildcard assets/*.png)
 assets_gltf = $(wildcard assets/*.glb)
 assets_ttf = $(wildcard assets/*.ttf)
@@ -43,17 +42,6 @@ filesystem/%.wav64: assets/%.wav
 	@mkdir -p $(dir $@)
 	@echo "    [AUDIO] $@"
 	$(N64_AUDIOCONV) $(AUDIOCONV_FLAGS) -o filesystem "$<"
-
-# filesystem/%.wav64: assets/%.wav
-# 	@mkdir -p $(dir $@)
-# 	@echo "    [SFX] $@"
-# 	$(N64_AUDIOCONV) $(AUDIOCONV_FLAGS) -o $(dir $@) "$<"
-
-
-# filesystem/%.wav64: assets/%.WAV
-# 	@mkdir -p $(dir $@)
-# 	@echo "    [AUDIO] $@"
-# 	$(N64_AUDIOCONV) $(AUDIOCONV_FLAGS) -o filesystem "$<"
 
 
 $(BUILD_DIR)/$(PROJECT_NAME).dfs: $(assets_conv)
