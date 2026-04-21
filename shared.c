@@ -61,8 +61,6 @@ T3DVec3 shotDir = {{0, 0, 0}};
 
 T3DViewport viewport;
 
-CollisionGrid *envCollision = NULL;
-
 // Matrices
 T3DMat4FP *modelMatFP;
 T3DMat4FP *envMatFP;
@@ -145,21 +143,6 @@ void update_animation() {
     newPos.v[0] += moveDir.v[0] * currSpeed;
     newPos.v[2] += moveDir.v[2] * currSpeed;
     playerPos = newPos;
-
-    // Wall collision: push player out of walls
-    WallResult wallHit = collision_grid_push_walls(envCollision, playerPos, 3.0f);
-    if (wallHit.pushed) {
-      playerPos = wallHit.newPos;
-      newPos = playerPos;
-    }
-
-    // Floor collision: follow terrain height on slopes
-    FloorResult floor = collision_grid_get_floor(envCollision, playerPos.v[0], playerPos.v[2]);
-    if (floor.found) {
-      playerPos.v[1] = floor.height + DEFAULT_PLAYER_Y;
-      newPos.v[1] = playerPos.v[1];
-    }
-
     lastPlayerPos = playerPos;
     posSet = false;
   } else {

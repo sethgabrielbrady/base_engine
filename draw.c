@@ -1,5 +1,4 @@
 #include "draw.h"
-#include "collision_grid.h"
 
 rspq_block_t *dplPlayerCharacter;
 rspq_block_t *dplMap;
@@ -29,9 +28,6 @@ void init_models() {
   skelBlend = t3d_skeleton_clone(&skel, false);
 
   background = sprite_load("rom:/background.sprite");
-
-  // Build collision grid from environment model (0.3 = envModel render scale)
-  envCollision = collision_grid_create_from_model(envModel, 0.3f);
 
   // --- Set up animations ---
   animIdle = t3d_anim_create(playerModel, "idleShoot");
