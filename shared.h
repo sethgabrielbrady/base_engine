@@ -12,6 +12,7 @@
 #include <math.h>
 
 #include "input.h"
+#include "collision_grid.h"
 
 // --- Camera ---
 #define ISO_ANGLE_X x_cam
@@ -100,6 +101,9 @@ extern T3DVec3 reticulePos;
 extern T3DVec3 lightDirVec;
 
 extern T3DViewport viewport;
+
+// Collision grid for environment
+extern CollisionGrid *envCollision;
 
 // Matrices
 extern T3DMat4FP *modelMatFP;

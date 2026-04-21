@@ -8,7 +8,7 @@ N64_CFLAGS += -std=gnu2x -O2
 
 PROJECT_NAME=base_engine1
 
-src = main.c input.c shared.c collision.c draw.c audio.c stats.c lights.c
+src = main.c input.c shared.c collision.c collision_grid.c draw.c audio.c stats.c lights.c
 assets_png = $(wildcard assets/*.png)
 assets_gltf = $(wildcard assets/*.glb)
 assets_ttf = $(wildcard assets/*.ttf)

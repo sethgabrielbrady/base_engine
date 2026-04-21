@@ -14,6 +14,7 @@
 #include "draw.h"
 #include "audio.h"
 #include "stats.h"
+#include "collision_grid.h"
 
 resolution_t custom_res = {
   .width = 320,
@@ -82,6 +83,7 @@ int game_cleanup() {
   t3d_model_free(playerModel);
   t3d_model_free(envModel);
   t3d_model_free(modelShadow);
+  collision_grid_destroy(envCollision);
   t3d_destroy();
   audio_close();
   mixer_close();
